@@ -1,13 +1,14 @@
-var gulp = require('gulp');
+'use strict';
 
-gulp.task('dependency', function () {
-  console.log('dependency');
+var gulp = require('gulp'),
+    jshint = require('gulp-jshint'),
+    stylish = require('jshint-stylish');
+
+gulp.task('lint', function() {
+  // return gulp.src('./**/*.js')
+  return gulp.src('./gulpfile.js')
+    .pipe(jshint())
+    .pipe(jshint.reporter(stylish));
 });
 
-gulp.task('example', ['dependency'], function () {
-  console.log("example");
-});
-
-gulp.task('default', [], function () {
-  console.log('default');
-});
+gulp.task('default', ['lint']);
