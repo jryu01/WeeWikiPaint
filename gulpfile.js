@@ -1,13 +1,24 @@
 'use strict';
 
 var gulp = require('gulp'),
+    mocha = require('gulp-mocha'),
+    gutil = require('gulp-util'),
     jshint = require('gulp-jshint'),
     stylish = require('jshint-stylish');
 
-gulp.task('lint', function() {
-  return gulp.src(['**/*.js', '!node_modules/**'])
+gulp.task('lint', function () {
+  return gulp.src(['src/**/*.js'])
     .pipe(jshint())
     .pipe(jshint.reporter(stylish));
 });
 
-gulp.task('default', ['lint']);
+gulp.task('test', function () {
+  return gulp.src(['src/**/*.spec.js'])
+    .pipe(mocha({ reporter: 'spec'}));
+});
+
+gulp.task('watch', function() {
+  gulp.watch(['src/**/*.js', './gulpfile.js'], ['lint', 'test']);
+});
+
+gulp.task('default', ['lint', 'test']);

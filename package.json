@@ -1,0 +1,29 @@
+{
+  "name": "weewikipaint",
+  "version": "1.0.0",
+  "description": "Following along with James Shore's \"Let's Code: Test-Driven Javascript\"",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "*",
+    "gulp": "^3.9.0",
+    "gulp-jshint": "^1.11.2",
+    "gulp-mocha": "^2.1.3",
+    "gulp-util": "^3.0.6",
+    "jshint-stylish": "*",
+    "mocha": "*"
+  },
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jryu01/weewikipaint.git"
+  },
+  "author": "Jaehwan Ryu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jryu01/weewikipaint/issues"
+  },
+  "homepage": "https://github.com/jryu01/weewikipaint#readme"
+}

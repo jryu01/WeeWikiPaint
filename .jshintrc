@@ -13,5 +13,11 @@
   "undef": true,
   "strict": true,
   "trailing": true,
-	"node": true
+	"node": true,
+
+  "globals": {
+    "describe": false,
+    "it": false
+  }
+
 }
