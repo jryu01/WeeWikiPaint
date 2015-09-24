@@ -6,29 +6,31 @@ var expect = require('chai').expect,
 
 describe('Http server', function () {
 
+  var PORT_NUM = 3000;
+
   before(function () {
-    server.start();
+    server.start(PORT_NUM);
   });
   after(function () {
     server.stop();
   });
 
-  it('should response correctly', function (done) {
-    http.get('http://localhost:8080', function (res) {
-      var body = '<html><head>Node HTTP Spike</head>' +
-            '<body><p>This is a spike of Node\'s HTTP Serve</p></body></html>';
+  it('should respond HelloWorld', function (done) {
+    var request = http.get('http://localhost:' + PORT_NUM );
+
+    request.on('response', function (res) {
+
       var data = '';
 
       expect(res.statusCode).to.equals(200);
 
-      res.on("data", function (chunk) {
+      res.on('data', function (chunk) {
         data += chunk;
       });
       res.on('end', function () {
-        expect(body).to.equals(data);
+        expect('Hello World').to.equals(data);
         done();
       });
-      res.on('close', done);
-    }).on('error', done);
+    });
   });
 });

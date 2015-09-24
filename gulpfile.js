@@ -20,7 +20,7 @@ gulp.task('test', function () {
 gulp.task('default', ['lint', 'test']);
 
 
-gulp.task('watch', function () {
+gulp.task('watch', ['default'], function () {
   return gulp.watch(['src/**/*.js', './gulpfile.js'], ['lint', 'test']);
 });
 
