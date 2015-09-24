@@ -9,6 +9,7 @@ server.on('request', function (req, res) {
 });
 
 exports.start = function (portNumber) {
+  if (!portNumber) { throw new Error('port number is required'); }
   server.listen(portNumber);
 };
 
