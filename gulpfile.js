@@ -17,8 +17,13 @@ gulp.task('test', function () {
     .pipe(mocha({ reporter: 'spec'}));
 });
 
-gulp.task('watch', function() {
-  gulp.watch(['src/**/*.js', './gulpfile.js'], ['lint', 'test']);
+gulp.task('default', ['lint', 'test']);
+
+
+gulp.task('watch', function () {
+  return gulp.watch(['src/**/*.js', './gulpfile.js'], ['lint', 'test']);
 });
 
-gulp.task('default', ['lint', 'test']);
+gulp.task('integrate', ['default'], function () {
+  console.log('Integration');
+});
