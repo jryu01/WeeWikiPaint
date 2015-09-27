@@ -36,7 +36,7 @@ gulp.task('nodev', function (done) {
 });
 
 gulp.task('lint', ['nodev'], function () {
-  return gulp.src(['src/**/*.js'])
+  return gulp.src(['src/**/*.js', 'spike/**/*.js'])
     .pipe(jshint())
     .pipe(jshint.reporter(stylish));
 });
