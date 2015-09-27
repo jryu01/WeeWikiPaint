@@ -6,7 +6,7 @@ var gulp = require('gulp'),
     jshint = require('gulp-jshint'),
     stylish = require('jshint-stylish');
 
-var NODE_VERSION = '0.10.33'; // must be in the form of [major].[minor].[patch]
+var NODE_VERSION = '0.12.7'; // must be in the form of [major].[minor].[patch]
 
 gulp.task('nodev', function (done) {
 
