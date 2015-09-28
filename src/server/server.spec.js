@@ -2,7 +2,8 @@
 
 var expect = require('chai').expect,
     server = require('./server'),
-    http = require('http');
+    http = require('http'),
+    fs = require('fs');
 
 describe('Http server', function () {
 
@@ -31,6 +32,19 @@ describe('Http server', function () {
         done();
       });
     });
+  });
+
+  it('should serve a file', function () {
+    var testDir = 'generated/test',
+        testFile = testDir + '/test.html';
+    try {
+      fs.writeFileSync(testFile, 'hello world');
+    }
+    finally {
+      fs.unlinkSync(testFile);
+      expect(fs.accessSync.bind(fs, testFile))
+        .to.throw(/no such file or directory/);
+    }
   });
 
   it('should throws an exception without port number', function () {

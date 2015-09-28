@@ -1,13 +1,17 @@
 'use strict';
 
 var gulp = require('gulp'),
+    exec = require('child_process').exec,
     mocha = require('gulp-mocha'),
     gutil = require('gulp-util'),
     jshint = require('gulp-jshint'),
     stylish = require('jshint-stylish');
 
 var NODE_VERSION = '0.12.7'; // must be in the form of [major].[minor].[patch]
+var GENERATED_DIR = 'generated';
+var TEMP_TEST_DIR =  GENERATED_DIR + '/test';
 
+// Ensures the node version.
 gulp.task('nodev', function (done) {
 
   var parseNodeVersion = function (versionString) {
@@ -35,13 +39,37 @@ gulp.task('nodev', function (done) {
   return done(); 
 });
 
+// Generates a test directory
+gulp.task('testdir', function (done) {
+  exec('mkdir -p ' + TEMP_TEST_DIR, function (error, stdout, stderr) {
+    if (error) {
+      error.showStack = false;
+      return done(error);
+    }
+    return done();
+  });
+});
+
+// Clean up generated files
+gulp.task('clean', function (done) {
+  exec('rm -rf ' + GENERATED_DIR, function (error, stdout, stderr) {
+    if (error) {
+      error.showStack = false;
+      return done(error);
+    }
+    return done();
+  });
+});
+
+// JSHint linting
 gulp.task('lint', ['nodev'], function () {
   return gulp.src(['src/**/*.js', 'spike/**/*.js'])
     .pipe(jshint())
     .pipe(jshint.reporter(stylish));
 });
 
-gulp.task('test', ['nodev'], function () {
+// Run tests
+gulp.task('test', ['nodev', 'testdir'], function () {
   return gulp.src(['src/**/*.spec.js'])
     .pipe(mocha({ reporter: 'spec'}));
 });
