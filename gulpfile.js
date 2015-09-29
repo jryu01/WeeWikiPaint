@@ -76,7 +76,7 @@ gulp.task('test', ['nodev', 'testdir'], function () {
 
 gulp.task('default', ['lint', 'test']);
 
-gulp.task('watch', ['default'], function () {
+gulp.task('watch', function () {
   return gulp.watch(['src/**/*.js', './gulpfile.js'], ['lint', 'test']);
 });
 
