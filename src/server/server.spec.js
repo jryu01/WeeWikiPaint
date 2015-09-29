@@ -7,48 +7,58 @@ var expect = require('chai').expect,
 
 describe('Http server', function () {
 
-  var PORT_NUM = 3000;
+  var PORT_NUM = 3000,
+      TEST_FILE = 'generated/test/test.html';
 
-  afterEach(function () {
-    server.stop();
-  });
-
-  it('should respond HelloWorld', function (done) {
-    server.start(PORT_NUM);
-
-    var request = http.get('http://localhost:' + PORT_NUM );
-
-    request.on('response', function (res) {
-
-      var data = '';
-
-      expect(res.statusCode).to.equals(200);
-
-      res.on('data', function (chunk) {
-        data += chunk;
-      });
-      res.on('end', function () {
-        expect('Hello World').to.equals(data);
+  afterEach(function (done) {
+    server.stop(function () {
+      try {
+        fs.unlinkSync(TEST_FILE);
+      } catch (e) {}
+      finally {
+        expect(fs.accessSync.bind(fs, TEST_FILE))
+          .to.throw(/no such file or directory/);
         done();
-      });
+      }
     });
   });
 
-  it('should serve a file', function () {
-    var testDir = 'generated/test',
-        testFile = testDir + '/test.html';
-    try {
-      fs.writeFileSync(testFile, 'hello world');
-    }
-    finally {
-      fs.unlinkSync(testFile);
-      expect(fs.accessSync.bind(fs, testFile))
-        .to.throw(/no such file or directory/);
-    }
+  it('should serve a file', function (done) {
+
+      var testData = 'This is served from a file';
+
+      fs.writeFileSync(TEST_FILE, testData);
+      server.start(TEST_FILE, PORT_NUM);
+
+      var request = http.get('http://localhost:' + PORT_NUM );
+
+      request.on('response', function (res) {
+
+        var data = '';
+
+        expect(res.statusCode).to.equals(200);
+
+        res.on('data', function (chunk) {
+          data += chunk;
+        });
+        res.on('end', function () {
+          expect(testData).to.equals(data);
+          done();
+        });
+      });
+  });
+
+  it('requires file to serve', function () {
+    expect(server.start.bind(server)).throw(/A file to serve is required/);
   });
 
   it('should throws an exception without port number', function () {
-    expect(server.start).to.throws(/port number is required/);
-    server.start(PORT_NUM);
+    expect(server.start.bind(server, TEST_FILE))
+      .to.throws(/port number is required/);
+  });
+
+  it('should excute callback when server stops', function (done) {
+    server.start(TEST_FILE, PORT_NUM);
+    server.stop(done);
   });
 });
