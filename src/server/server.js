@@ -6,12 +6,12 @@ var http = require('http'),
 
 var serveFile = function (response, file) {
   fs.readFile(file, function (err, data) {
-    if (err) throw err;
+    if (err) { throw err; }
     response.end(data);
   });
 };
 
-exports.start = function (homePage, notFoundPage, portNumber) {
+exports.start = function (homePage, notFoundPage, portNumber, callback) {
   if (!homePage) { throw new Error('A file to serve is required'); }
   if (!notFoundPage) { throw new Error('404 file to serve is required'); }
   if (!portNumber) { throw new Error('port number is required'); }
@@ -26,7 +26,7 @@ exports.start = function (homePage, notFoundPage, portNumber) {
     }
   });
 
-  server.listen(portNumber);
+  server.listen(portNumber, callback);
 };
 
 exports.stop = function (cb) {

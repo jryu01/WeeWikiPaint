@@ -11,19 +11,19 @@ var PORT_NUM = 3000,
 
 var httpGet = function (url, callback) {
 
-  server.start(TEST_HOME_PAGE, TEST_404_PAGE, PORT_NUM);
+  server.start(TEST_HOME_PAGE, TEST_404_PAGE, PORT_NUM, function () {
+    var request = http.get(url);
 
-  var request = http.get(url);
+    request.on('response', function (res) {
 
-  request.on('response', function (res) {
+      var body = '';
 
-    var body = '';
-
-    res.on('data', function (chunk) {
-      body += chunk;
-    });
-    res.on('end', function () {
-      server.stop(callback.bind(null, res, body));
+      res.on('data', function (chunk) {
+        body += chunk;
+      });
+      res.on('end', function () {
+        server.stop(callback.bind(null, res, body));
+      });
     });
   });
 };
@@ -93,7 +93,8 @@ describe('Http server', function () {
   });
 
   it('should excute callback when server stops', function (done) {
-    server.start(TEST_HOME_PAGE, TEST_404_PAGE, PORT_NUM);
-    server.stop(done);
+    server.start(TEST_HOME_PAGE, TEST_404_PAGE, PORT_NUM, function () {
+      server.stop(done);
+    });
   });
 });
