@@ -3,21 +3,21 @@
 
 var expect = require('chai').expect,
     http = require('http'),
-    child = require('child_process'), 
-    node;
+    childProcess = require('child_process'), 
+    child;
 
 var runServer = function (callback) {
-  node = child.spawn('node', ['src/server/weewikipaint', '8080']);
-  node.stdout.setEncoding('utf8');
-  node.stdout.on('data', function (chunk) {
+  child = childProcess.spawn('node', ['src/server/weewikipaint', '8080']);
+  child.stdout.setEncoding('utf8');
+  child.stdout.on('data', function (chunk) {
     if (chunk.trim() === 'Server started') {
       callback(null);
     } else {
       callback(chunk);
     }
   });
-  node.stderr.setEncoding('utf8');
-  node.stderr.on('data', callback);
+  child.stderr.setEncoding('utf8');
+  child.stderr.on('data', callback);
 };
 
 var httpGet = function (url, callback) {
@@ -38,8 +38,8 @@ describe('Smoke test', function () {
   before(runServer);
 
   after(function (done) {
-    node.kill();
-    node.on('exit', done);
+    child.kill();
+    child.on('exit', done);
   });
 
   it('should get the hompage', function (done) {
