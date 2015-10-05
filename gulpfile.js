@@ -8,9 +8,12 @@ var gulp = require('gulp'),
     jshint = require('gulp-jshint'),
     stylish = require('jshint-stylish');
 
-var NODE_VERSION = '0.12.7'; // must be in the form of [major].[minor].[patch]
-var GENERATED_DIR = 'generated';
-var TEMP_TEST_DIR =  GENERATED_DIR + '/test';
+var NODE_VERSION = '0.12.7', // must be in the form of [major].[minor].[patch]
+    GENERATED_DIR = 'generated',
+    TEMP_TEST_DIR =  GENERATED_DIR + '/test',
+    NODE_FILES = ['src/server/**/*.js', 'src/*.js', './gulpfile.js'],
+    NODE_TEST_FILES = ['src/server/**/*.spec.js', 'src/*.spec.js'],
+    CLIENT_FILES = ['src/client/**/*.js'];
 
 // Ensures the node version.
 gulp.task('nodev', function (done) {
@@ -70,9 +73,8 @@ gulp.task('lint', ['nodev'], function () {
 });
 
 // Run tests
-gulp.task('testServer', ['nodev', 'testdir'], function () {
-  return gulp.src(['src/server/**/*.spec.js', 'src/*.spec.js'])
-    .pipe(mocha({ reporter: 'spec'}));
+gulp.task('testNode', ['nodev', 'testdir'], function () {
+  return gulp.src(NODE_TEST_FILES).pipe(mocha({ reporter: 'spec'}));
 });
 
 gulp.task('testClient', ['nodev', 'testdir'], function (done) {
@@ -82,7 +84,7 @@ gulp.task('testClient', ['nodev', 'testdir'], function (done) {
   }, done).start();
 });
 
-gulp.task('test', ['testServer', 'testClient']);
+gulp.task('test', ['testNode', 'testClient']);
 
 gulp.task('default', ['lint', 'test']);
 
@@ -95,12 +97,7 @@ gulp.task('watch', function () {
   var karmaWacher = new karma.Server({
     configFile: __dirname + '/karma.conf.js',
   }).start();
-  // watch for client files for linting
-  gulp.watch('src/client/**/*.spec.js', ['lint']);
 
-  // watch for server files for linting and testing
-  gulp.watch(
-    ['src/server/**/*.spec.js', 'src/*.spec.js', './gulpfile.js'],
-    ['lint', 'testServer']
-  );
+  gulp.watch(CLIENT_FILES, ['lint']);
+  gulp.watch(NODE_FILES, ['lint', 'testNode']);
 });
