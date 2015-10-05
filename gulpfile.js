@@ -2,6 +2,7 @@
 
 var gulp = require('gulp'),
     exec = require('child_process').exec,
+    karma = require('karma'),
     mocha = require('gulp-mocha'),
     gutil = require('gulp-util'),
     jshint = require('gulp-jshint'),
@@ -69,17 +70,37 @@ gulp.task('lint', ['nodev'], function () {
 });
 
 // Run tests
-gulp.task('test', ['nodev', 'testdir'], function () {
-  return gulp.src(['src/**/*.spec.js'])
+gulp.task('testServer', ['nodev', 'testdir'], function () {
+  return gulp.src(['src/server/**/*.spec.js', 'src/*.spec.js'])
     .pipe(mocha({ reporter: 'spec'}));
 });
 
-gulp.task('default', ['lint', 'test']);
-
-gulp.task('watch', function () {
-  return gulp.watch(['src/**/*.js', './gulpfile.js'], ['lint', 'test']);
+gulp.task('testClient', ['nodev', 'testdir'], function (done) {
+  var test = new karma.Server({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true
+  }, done).start();
 });
+
+gulp.task('test', ['testServer', 'testClient']);
+
+gulp.task('default', ['lint', 'test']);
 
 gulp.task('integrate', ['default'], function () {
   console.log('Integration step goes here');
+});
+
+gulp.task('watch', function () {
+  // watch for client files for test
+  var karmaWacher = new karma.Server({
+    configFile: __dirname + '/karma.conf.js',
+  }).start();
+  // watch for client files for linting
+  gulp.watch('src/client/**/*.spec.js', ['lint']);
+
+  // watch for server files for linting and testing
+  gulp.watch(
+    ['src/server/**/*.spec.js', 'src/*.spec.js', './gulpfile.js'],
+    ['lint', 'testServer']
+  );
 });
