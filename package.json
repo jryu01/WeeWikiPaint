@@ -1,8 +1,11 @@
 {
   "name": "weewikipaint",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Following along with James Shore's \"Let's Code: Test-Driven Javascript\"",
   "main": "index.js",
+  "engines": {
+    "node": "0.12.x"
+  },
   "dependencies": {},
   "devDependencies": {
     "chai": "*",
