@@ -6,9 +6,9 @@ var expect = chai.expect;
 
 describe('Nothing', function () {
 
-  it('should pass', function () {
-    dump('hello whenever');
-    expect(true).to.be.ok;
+  it('should run', function () {
+    var extractedDiv = document.getElementById('tdjs');
+    expect(extractedDiv.getAttribute('foo')).to.equal('bar');
   });
 
 });

@@ -78,10 +78,11 @@ gulp.task('testNode', ['nodev', 'testdir'], function () {
 });
 
 gulp.task('testClient', ['nodev', 'testdir'], function (done) {
-  var test = new karma.Server({
+  var browserTest = new karma.Server({
     configFile: __dirname + '/karma.conf.js',
     singleRun: true
-  }, done).start();
+  }, done);
+  browserTest.start();
 });
 
 gulp.task('test', ['testNode', 'testClient']);
@@ -93,11 +94,10 @@ gulp.task('integrate', ['default'], function () {
 });
 
 gulp.task('watch', function () {
-  // watch for client files for test
-  var karmaWacher = new karma.Server({
+  var browserTestWatcher = new karma.Server({
     configFile: __dirname + '/karma.conf.js',
-  }).start();
-
+  });
+  browserTestWatcher.start();
   gulp.watch(CLIENT_FILES, ['lint']);
   gulp.watch(NODE_FILES, ['lint', 'testNode']);
 });
