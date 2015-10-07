@@ -1,15 +1,37 @@
 'use strict';
 /*jshint expr: true*/
-/*globals dump, wwp:true*/
+/*globals dump, wwp:true, $*/
 
 var expect = chai.expect;
 
-describe('Nothing', function () {
+describe('Drawing area', function () {
 
-  it('should run', function () {
-    wwp.createElement();
-    var extractedDiv = document.getElementById('tdjs');
-    expect(extractedDiv.getAttribute('foo')).to.equal('bar');
+  var $drawingDiv;
+
+  afterEach(function () {
+    $drawingDiv.remove();
+  });
+
+  it('should be initialized in predefined div', function () {
+    // create div that's assumed to be in our home page
+    $drawingDiv = $('<div></div>');
+    $(document.body).append($drawingDiv);
+
+    // initialize it
+    wwp.initializeDrawingArea($drawingDiv[0]);
+
+    // verify it was initialized correctly
+    var tagName = $drawingDiv.children()[0].tagName;
+    expect(tagName).to.equal('svg'); 
+  });
+
+  it('should have same dimensions as its enclosing div', function () {
+    $drawingDiv = $('<div style="height: 200px; width: 400px;">hi</div>');
+    $(document.body).append($drawingDiv);
+
+    var paper = wwp.initializeDrawingArea($drawingDiv[0]);
+    expect(paper.width).to.equal(400);
+    expect(paper.height).to.equal(200);
   });
 
 });

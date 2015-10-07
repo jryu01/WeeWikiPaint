@@ -5,7 +5,7 @@ var expect = require('chai').expect,
     http = require('http'),
     fs = require('fs');
 
-var PORT_NUM = 3000,
+var PORT_NUM = 8083,
     TEST_HOME_PAGE = 'generated/test/testHome.html',
     TEST_404_PAGE = 'generated/test/test404.html';
 
