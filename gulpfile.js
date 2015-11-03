@@ -67,7 +67,7 @@ gulp.task('clean', function (done) {
 
 // JSHint linting
 gulp.task('lint', ['nodev'], function () {
-  return gulp.src(['src/**/*.js', 'spike/**/*.js'])
+  return gulp.src(['src/**/*.js', 'spike/**/*.js', '*.js'])
     .pipe(jshint())
     .pipe(jshint.reporter(stylish));
 });
