@@ -1,6 +1,6 @@
 'use strict';
 
-var http = require('http'), 
+var http = require('http'),
     fs = require('fs'),
     server = http.createServer();
 
@@ -15,7 +15,7 @@ exports.start = function (homePage, notFoundPage, portNumber, callback) {
   if (!homePage) { throw new Error('A file to serve is required'); }
   if (!notFoundPage) { throw new Error('404 file to serve is required'); }
   if (!portNumber) { throw new Error('port number is required'); }
-  
+
   server.on('request', function (req, res) {
     if (req.url === '/' || req.url === '/index.html') {
       res.statusCode = 200;
