@@ -9,7 +9,7 @@ describe('Drawing area', function () {
   var $drawingDiv;
   var paper;
 
-  var drawingElements = function (paper) {
+  var getDrawingElements = function (paper) {
     var elements = [];
 		paper.forEach(function (element) {
 			elements.push(element);
@@ -40,8 +40,19 @@ describe('Drawing area', function () {
 
   it('should draw a line', function () {
     wwp.drawLine(20, 40, 90, 90);
-    var elements = drawingElements(paper);
+    var elements = getDrawingElements(paper);
     expect(pathFor(elements[0])).to.equal('M20,40L90,90');
   });
 
+  it('should respond to the mouse', function () {
+    var e = $.Event('click');
+    e.offsetX = 10;
+    e.offsetY = 10;
+
+    $drawingDiv.on('click', function () {
+      var elements = getDrawingElements(paper);
+      expect(pathFor(elements[0])).to.equal('M0,0L10,10');
+    });
+    $drawingDiv.trigger(e);
+  });
 });

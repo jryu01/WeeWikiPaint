@@ -9,7 +9,14 @@ wwp = {};
 
   wwp.initializeDrawingArea = function (drawingAreaElement) {
     paper = new Raphael(drawingAreaElement);
-    // var $drawingArea = $(drawingAreaElement);
+
+    var $drawingArea = $(drawingAreaElement);
+
+    $drawingArea.on('click', function (event) {
+      var x = event.offsetX;
+      var y = event.offsetY;
+      wwp.drawLine(0, 0, x, y);
+    });
     // var prevX;
     // var prevY;
     // var isDragging = false;
