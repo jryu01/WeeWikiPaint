@@ -17,6 +17,7 @@ wwp = {};
       var y = event.offsetY;
       wwp.drawLine(0, 0, x, y);
     });
+    
     // var prevX;
     // var prevY;
     // var isDragging = false;

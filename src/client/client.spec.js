@@ -16,9 +16,15 @@ describe('Drawing area', function () {
 		});
     return elements;
   };
+
   var pathFor = function (drawingElement) {
-    var box = drawingElement.getBBox();
-    return 'M' + box.x + ',' + box.y + 'L' + box.x2 + ',' + box.y2;
+    //Note: might not work in ie9 and below version.
+    var pathValue = drawingElement.node.attributes.d.value;
+    return pathValue.substring(1).replace('L', ',').split(',').map(Number);
+  };
+
+  var paperPaths = function (paper) {
+    return getDrawingElements(paper).map(pathFor);
   };
 
   beforeEach(function () {
@@ -39,20 +45,18 @@ describe('Drawing area', function () {
   });
 
   it('should draw a line', function () {
-    wwp.drawLine(20, 40, 90, 90);
-    var elements = getDrawingElements(paper);
-    expect(pathFor(elements[0])).to.equal('M20,40L90,90');
+    wwp.drawLine(20, 40, 10, 90);
+    expect(paperPaths(paper)).to.deep.equal([[20, 40, 10, 90]]);
   });
 
-  it('should respond to the mouse', function () {
-    var e = $.Event('click');
-    e.offsetX = 10;
-    e.offsetY = 10;
+  it('should draw line segments in respone to mouse drags', function () {
+    $drawingDiv.trigger($.Event('mousedown', { offsetX: 20, offsetY: 30 }));
+    $drawingDiv.trigger($.Event('mousemove', { offsetX: 50, offsetY: 60 }));
+    $drawingDiv.trigger($.Event('mouseup', { offsetX: 50, offsetY: 60 }));
 
-    $drawingDiv.on('click', function () {
-      var elements = getDrawingElements(paper);
-      expect(pathFor(elements[0])).to.equal('M0,0L10,10');
-    });
-    $drawingDiv.trigger(e);
+    expect(paperPaths(paper)).to.deep.equal([[20, 30, 50, 60]]);
   });
+
+  // it('should consider border when calculating mouse target', function () {
+  // });
 });
