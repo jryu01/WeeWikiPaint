@@ -12,32 +12,22 @@ wwp = {};
     paper = new Raphael(drawingAreaElement);
 
     var $drawingArea = $(drawingAreaElement);
-    var prevX;
-    var prevY;
-    var isDragging = false;
+    var start;
 
     $drawingArea.mousemove(function (event) {
-      if (!isDragging) { return; }
-      var x = event.offsetX;
-      var y = event.offsetY;
-      wwp.drawLine(prevX, prevY, x, y);
-      prevX = x;
-      prevY = y;
-    });
-    //
-    // $drawingArea.mouseenter(function (event) {
-    //   prevX = event.offsetX;
-    //   prevY = event.offsetY;
-    // });
-    //
-    $drawingArea.mousedown(function (event) {
-      prevX = event.offsetX;
-      prevY = event.offsetY;
-      isDragging = true;
+      if (!start) { return; }
+      var end = { x: event.offsetX, y: event.offsetY };
+      wwp.drawLine(start.x, start.y, end.x, end.y);
+      start.x = end.x;
+      start.y = end.y;
     });
 
-    $drawingArea.mouseup(function (event) {
-      isDragging = false;
+    $drawingArea.mousedown(function (event) {
+      start = { x: event.offsetX, y: event.offsetY };
+    });
+
+    $(document).mouseup(function (event) {
+      start = undefined;
     });
 
     return paper;
