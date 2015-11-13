@@ -51,10 +51,15 @@ describe('Drawing area', function () {
 
   it('should draw line segments in respone to mouse drags', function () {
     $drawingDiv.trigger($.Event('mousedown', { offsetX: 20, offsetY: 30 }));
+    $drawingDiv.trigger($.Event('mousemove', { offsetX: 40, offsetY: 50 }));
     $drawingDiv.trigger($.Event('mousemove', { offsetX: 50, offsetY: 60 }));
     $drawingDiv.trigger($.Event('mouseup', { offsetX: 50, offsetY: 60 }));
+    $drawingDiv.trigger($.Event('mousemove', { offsetX: 55, offsetY: 65 }));
 
-    expect(paperPaths(paper)).to.deep.equal([[20, 30, 50, 60]]);
+    expect(paperPaths(paper)).to.deep.equal([
+      [20, 30, 40, 50],
+      [40, 50, 50, 60]]
+    );
   });
 
   // it('should consider border when calculating mouse target', function () {

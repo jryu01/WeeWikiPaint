@@ -8,42 +8,37 @@ wwp = {};
   var paper;
 
   wwp.initializeDrawingArea = function (drawingAreaElement) {
+
     paper = new Raphael(drawingAreaElement);
 
     var $drawingArea = $(drawingAreaElement);
+    var prevX;
+    var prevY;
+    var isDragging = false;
 
-    $drawingArea.on('click', function (event) {
+    $drawingArea.mousemove(function (event) {
+      if (!isDragging) { return; }
       var x = event.offsetX;
       var y = event.offsetY;
-      wwp.drawLine(0, 0, x, y);
+      wwp.drawLine(prevX, prevY, x, y);
+      prevX = x;
+      prevY = y;
     });
-    
-    // var prevX;
-    // var prevY;
-    // var isDragging = false;
-    //
-    // $drawingArea.mousemove(function (event) {
-    //   var x = event.offsetX;
-    //   var y = event.offsetY;
-    //   if (prevX && isDragging) {
-    //     wwp.drawLine(prevX, prevY, x, y);
-    //   }
-    //   prevX = x;
-    //   prevY = y;
-    // });
     //
     // $drawingArea.mouseenter(function (event) {
     //   prevX = event.offsetX;
     //   prevY = event.offsetY;
     // });
     //
-    // $drawingArea.mousedown(function (event) {
-    //   isDragging = true;
-    // });
-    //
-    // $drawingArea.mouseup(function (event) {
-    //   isDragging = false;
-    // });
+    $drawingArea.mousedown(function (event) {
+      prevX = event.offsetX;
+      prevY = event.offsetY;
+      isDragging = true;
+    });
+
+    $drawingArea.mouseup(function (event) {
+      isDragging = false;
+    });
 
     return paper;
   };
